@@ -23,9 +23,10 @@ class AuthUser extends SerializableEntity {
     phone = map['phone'] as String;
     password = map['password'] as String;
     authorized = Parsers.parseInt(map['authorized']);
-    registerdate = Parsers.parseInt(map['registerdate']);
     roles = (map['roles'] as List)?.cast<String>();
     history = (map['history'] as List)?.cast<String>();
+    registerdate = Parsers.parseInt(map['registerdate']) ??
+        DateTime.parse(map['register_date'] as String).millisecondsSinceEpoch;
   }
 
   @override
