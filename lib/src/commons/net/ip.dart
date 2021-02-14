@@ -15,6 +15,7 @@ import 'package:http/http.dart' as http;
 abstract class IPUtils {
   /// returns a future string with the public ip
   static Future<String> getPublicIP() async => json.decode(utf8.decode(
-          (await http.get('http://checkip.amazonaws.com')).body.codeUnits))
-      as String;
+      (await http.get(Uri.parse('http://checkip.amazonaws.com')))
+          .body
+          .codeUnits)) as String;
 }
