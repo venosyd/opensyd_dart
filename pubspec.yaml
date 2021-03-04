@@ -2,10 +2,10 @@ name: "opensyd_dart"
 author: Sergio Lisan <sels@venosyd.com>
 publish_to: "none"
 
-version: 3.0.0+1
+version: 3.0.1+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.10.0 <3.0.0"
 
 dependencies:
   crypto:
@@ -14,3 +14,7 @@ dependencies:
   meta:
   universal_html:
   verbal_expressions:
+    # git:
+    #   url: git@github.com:sergioelisan/DartVerbalExpressions.git
+    #   ref: 0.5.0-nullsafety
+    
