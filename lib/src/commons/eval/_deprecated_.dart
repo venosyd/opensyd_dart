@@ -1,6 +1,6 @@
 ///
 /// @author sergio lisan
 ///
-/// venosyd © 2016-2020
+/// venosyd © 2016-2021
 ///
 library opensyd.dart.commons.eval.deprecated;
