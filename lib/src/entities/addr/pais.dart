@@ -3,37 +3,33 @@
 ///
 /// sergio lisan <sels@venosyd.com>
 ///
-library opensyd.entities.addr.v2.pais;
+library opensyd.entities.addr.pais;
 
 import 'dart:async';
 
-import '../util/_module_.dart';
+import '../_module_.dart';
 
 ///
 /// os nomes das classes estao em portugues propositalmente
 /// para nao conflitar com a lib antiga
 ///
-class Pais extends SerializableEntity {
+class Pais extends OpensydEntity {
   ///
-  Pais() : super(null, 'Pais');
-
-  Pais.fromJson(Map<String, dynamic> map) : super(map['id'] as String, 'Pais') {
-    code = Parsers.parseInt(map['code'] as String);
-    nome = map['nome'] as String ?? '';
-  }
+  Pais({String id}) : super(id, 'Pais');
 
   @override
-  Pais fromJson(Map<String, dynamic> map) => Pais.fromJson(map);
+  Pais fromJson(Map<String, dynamic> map) => Pais(id: map['id'] as String)
+    ..code = Parsers.parseInt(map['code'] as String)
+    ..nome = map['nome'] as String ?? '';
 
-  String get nome => json['nome'] as String;
-  set nome(String value) => json['nome'] = value;
+  String _nome;
+  String get nome => _nome;
+  set nome(String _) => set('nome', _nome = _);
 
-  int get code => json['code'] as int;
-  set code(int value) => json['code'] = value;
+  int _code;
+  int get code => _code;
+  set code(int _) => set('code', _code = _);
 
   @override
-  Future<Pais> deep(entities, {foreign, update}) async {
-    super.deep(entities, foreign: foreign, update: update);
-    return this;
-  }
+  Future<Pais> deep(entities, {foreign, update}) async => this;
 }

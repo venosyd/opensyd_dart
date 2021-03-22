@@ -3,52 +3,43 @@
 ///
 /// sergio lisan <sels@venosyd.com>
 ///
-library opensyd.entities.addr.v2.cidade;
+library opensyd.entities.addr.cidade;
 
 import 'dart:async';
 
-import '../util/_module_.dart';
+import '../_module_.dart';
 import 'estado.dart';
 
 ///
 /// os nomes das classes estao em portugues propositalmente
 /// para nao conflitar com a lib antiga
 ///
-class Cidade extends SerializableEntity {
+class Cidade extends OpensydEntity {
   ///
-  Cidade() : super(null, 'Cidade');
-
-  Cidade.fromJson(Map<String, dynamic> map)
-      : super(map['id'] as String, 'Cidade') {
-    estadoID = map['estadoID'] as String;
-    nome = map['nome'] as String ?? '';
-  }
+  Cidade({String id}) : super(id, 'Cidade');
 
   @override
-  Cidade fromJson(Map<String, dynamic> map) => Cidade.fromJson(map);
+  Cidade fromJson(Map<String, dynamic> map) => Cidade(id: map['id'] as String)
+    ..estadoID = map['estadoID'] as String
+    ..nome = map['nome'] as String ?? '';
 
-  String get estadoID => json['estadoID'] as String;
-  set estadoID(String value) => json['estadoID'] = value;
+  String _estadoID;
+  String get estadoID => _estadoID;
+  set estadoID(String _) => set('estadoID', _estadoID = _);
 
-  String get nome => json['nome'] as String;
-  set nome(String value) => json['nome'] = value;
+  String _nome;
+  String get nome => _nome;
+  set nome(String _) => set('nome', _nome = _);
 
   Estado _estado;
   Estado get estado => _estado;
-  set estado(Estado value) =>
-      value != null ? estadoID = (_estado = value).id : '';
-
-  @override
-  Map<String, dynamic> get deepmap => Map<String, dynamic>.from(json)
-    ..['estado'] = estado?.deepmap ?? <String, dynamic>{};
+  set estado(Estado _) => estadoID = setdeep('estado', _estado = _);
 
   @override
   Future<Cidade> deep(entities, {foreign, update}) async {
-    super.deep(entities, foreign: foreign, update: update);
-
+    deepconfig(entities, foreign: foreign, update: update);
     fill<Estado>(estado, estadoID, (_) => estado = _);
-    await deepprocess();
 
-    return this;
+    return await deepprocess();
   }
 }

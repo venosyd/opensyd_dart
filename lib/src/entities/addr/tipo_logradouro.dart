@@ -3,35 +3,29 @@
 ///
 /// sergio lisan <sels@venosyd.com>
 ///
-library opensyd.entities.addr.v2.tipologradouro;
+library opensyd.entities.addr.tipologradouro;
 
 import 'dart:async';
 
-import '../util/_module_.dart';
+import '../_module_.dart';
 
 ///
 /// os descricaos das classes estao em portugues propositalmente
 /// para nao conflitar com a lib antiga
 ///
-class TipoLogradouro extends SerializableEntity {
+class TipoLogradouro extends OpensydEntity {
   ///
-  TipoLogradouro() : super(null, 'TipoLogradouro');
-
-  TipoLogradouro.fromJson(Map<String, dynamic> map)
-      : super(map['id'] as String, 'TipoLogradouro') {
-    descricao = map['descricao'] as String ?? '';
-  }
+  TipoLogradouro({String id}) : super(id, 'TipoLogradouro');
 
   @override
   TipoLogradouro fromJson(Map<String, dynamic> map) =>
-      TipoLogradouro.fromJson(map);
+      TipoLogradouro(id: map['id'] as String)
+        ..descricao = map['descricao'] as String ?? '';
 
-  String get descricao => json['descricao'] as String;
-  set descricao(String value) => json['descricao'] = value;
+  String _descricao;
+  String get descricao => _descricao;
+  set descricao(String _) => set('descricao', _descricao = _);
 
   @override
-  Future<TipoLogradouro> deep(entities, {foreign, update}) async {
-    super.deep(entities, foreign: foreign, update: update);
-    return this;
-  }
+  Future<TipoLogradouro> deep(entities, {foreign, update}) async => this;
 }

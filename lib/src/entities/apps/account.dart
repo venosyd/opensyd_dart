@@ -7,40 +7,36 @@ library opensyd.entities.apps.account;
 
 import 'dart:async';
 
-import '../util/_module_.dart';
+import 'package:opensyd_dart/opensyd_dart.dart';
 
 ///
-class Account extends SerializableEntity {
+class Account extends OpensydEntity {
   ///
-  Account() : super(null, 'Account');
-
-  ///
-  Account.fromJson(Map<String, dynamic> map)
-      : super(map['id'] as String, 'Account') {
-    service = map['service'] as String;
-    email = map['email'] as String;
-    hash = map['hash'] as String;
-    registered = Parsers.parseInt(map['registered']);
-  }
+  Account({String id}) : super(id, 'Account');
 
   @override
-  Account fromJson(Map<String, dynamic> map) => Account.fromJson(map);
+  Account fromJson(Map<String, dynamic> map) => Account(id: map['id'] as String)
+    ..service = map['service'] as String
+    ..email = map['email'] as String
+    ..hash = map['hash'] as String
+    ..registered = Parsers.parseInt(map['registered']);
 
-  String get service => json['service'] as String;
-  set service(String value) => json['service'] = value;
+  String _service;
+  String get service => _service;
+  set service(String _) => set('service', _service = _);
 
-  String get email => json['email'] as String;
-  set email(String value) => json['email'] = value;
+  String _email;
+  String get email => _email;
+  set email(String _) => set('email', _email = _);
 
-  String get hash => json['hash'] as String;
-  set hash(String value) => json['hash'] = value;
+  String _hash;
+  String get hash => _hash;
+  set hash(String _) => set('hash', _hash = _);
 
-  int get registered => json['registered'] as int;
-  set registered(int value) => json['registered'] = value;
+  int _registered;
+  int get registered => _registered;
+  set registered(int _) => set('registered', _registered = _);
 
   @override
-  Future<Account> deep(entities, {foreign, update}) async {
-    super.deep(entities, foreign: foreign, update: update);
-    return this;
-  }
+  Future<Account> deep(entities, {foreign, update}) async => this;
 }

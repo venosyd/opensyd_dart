@@ -3,35 +3,21 @@
 ///
 /// sergio lisan <sels@venosyd.com>
 ///
-library opensyd.entities.addr.v2.local;
+library opensyd.entities.addr.local;
 
 import 'dart:async';
 
 import '../../extensions/_module_.dart';
-import '../util/_module_.dart';
+import '../_module_.dart';
 import '_module_.dart';
 
 ///
 /// Este objeto diferente do Endereco é independente de conexao com o
-/// Address e pode ser persistido/consultado sem conexao com este.
+/// Spanish e pode ser persistido/consultado sem conexao com este.
 ///
-class EnderecoLocal extends SerializableEntity {
+class EnderecoLocal extends OpensydEntity {
   ///
-  EnderecoLocal() : super(null, 'EnderecoLocal');
-
-  EnderecoLocal.fromJson(Map<String, dynamic> map)
-      : super(map['id'] as String, 'EnderecoLocal') {
-    logradouro = map['logradouro'] as String;
-    cep = map['cep'] as String;
-    complemento = map['complemento'] as String ?? '';
-    numero = Parsers.parseInt(map['numero']);
-    distrito = map['distrito'] as String;
-    cidade = map['cidade'] as String;
-    estado = map['estado'] as String;
-    pais = map['pais'] as String;
-    longitude = Parsers.parseDouble(map['longitude']);
-    latitude = Parsers.parseDouble(map['latitude']);
-  }
+  EnderecoLocal({String id}) : super(id, 'EnderecoLocal');
 
   /// recebe um endereco normal, integrado com o servico de enderecos
   /// e cria um objeto independente
@@ -52,37 +38,57 @@ class EnderecoLocal extends SerializableEntity {
 
   @override
   EnderecoLocal fromJson(Map<String, dynamic> map) =>
-      EnderecoLocal.fromJson(map);
+      EnderecoLocal(id: map['id'] as String)
+        ..logradouro = map['logradouro'] as String
+        ..cep = map['cep'] as String
+        ..complemento = map['complemento'] as String ?? ''
+        ..numero = Parsers.parseInt(map['numero'])
+        ..distrito = map['distrito'] as String
+        ..cidade = map['cidade'] as String
+        ..estado = map['estado'] as String
+        ..pais = map['pais'] as String
+        ..longitude = Parsers.parseDouble(map['longitude'])
+        ..latitude = Parsers.parseDouble(map['latitude']);
 
-  String get logradouro => json['logradouro'] as String;
-  set logradouro(String value) => json['logradouro'] = value;
+  String _logradouro;
+  String get logradouro => _logradouro;
+  set logradouro(String _) => set('logradouro', _logradouro = _);
 
-  String get complemento => json['complemento'] as String;
-  set complemento(String value) => json['complemento'] = value;
+  String _complemento;
+  String get complemento => _complemento;
+  set complemento(String _) => set('complemento', _complemento = _);
 
-  int get numero => json['numero'] as int;
-  set numero(int value) => json['numero'] = value;
+  int _numero;
+  int get numero => _numero;
+  set numero(int _) => set('numero', _numero = _);
 
-  String get cep => json['cep'] as String;
-  set cep(String value) => json['cep'] = value;
+  String _cep;
+  String get cep => _cep;
+  set cep(String _) => set('cep', _cep = _);
 
-  String get distrito => json['distrito'] as String;
-  set distrito(String value) => json['distrito'] = value;
+  String _distrito;
+  String get distrito => _distrito;
+  set distrito(String _) => set('distrito', _distrito = _);
 
-  String get cidade => json['cidade'] as String;
-  set cidade(String value) => json['cidade'] = value;
+  String _cidade;
+  String get cidade => _cidade;
+  set cidade(String _) => set('cidade', _cidade = _);
 
-  String get estado => json['estado'] as String;
-  set estado(String value) => json['estado'] = value;
+  String _estado;
+  String get estado => _estado;
+  set estado(String _) => set('estado', _estado = _);
 
-  String get pais => json['pais'] as String;
-  set pais(String value) => json['pais'] = value;
+  String _pais;
+  String get pais => _pais;
+  set pais(String _) => set('pais', _pais = _);
 
-  double get latitude => json['latitude'] as double;
-  set latitude(double value) => json['latitude'] = value;
+  double _latitude;
+  double get latitude => _latitude;
+  set latitude(double _) => set('latitude', _latitude = _);
 
-  double get longitude => json['longitude'] as double;
-  set longitude(double value) => json['longitude'] = value;
+  double _longitude;
+  double get longitude => _longitude;
+  set longitude(double _) => set('longitude', _longitude = _);
 
   @override
   String searchtitle() => '$logradouro $numero, ${cep.cepmask}';
@@ -92,8 +98,5 @@ class EnderecoLocal extends SerializableEntity {
       '${cep.cepmask} ${distrito ?? ''} - ${cidade ?? ''}, ${estado ?? ''}';
 
   @override
-  Future<EnderecoLocal> deep(entities, {foreign, update}) async {
-    super.deep(entities, foreign: foreign, update: update);
-    return this;
-  }
+  Future<EnderecoLocal> deep(entities, {foreign, update}) async => this;
 }

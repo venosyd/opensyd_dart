@@ -3,55 +3,48 @@
 ///
 /// sergio lisan <sels@venosyd.com>
 ///
-library opensyd.entities.addr.v2.estado;
+library opensyd.entities.addr.estado;
 
 import 'dart:async';
 
-import '../util/_module_.dart';
+import '../_module_.dart';
 import 'pais.dart';
 
 ///
 /// os nomes das classes estao em portugues propositalmente
 /// para nao conflitar com a lib antiga
 ///
-class Estado extends SerializableEntity {
+class Estado extends OpensydEntity {
   ///
-  Estado() : super(null, 'Estado');
-
-  Estado.fromJson(Map<String, dynamic> map)
-      : super(map['id'] as String, 'Estado') {
-    paisID = map['paisID'] as String;
-    nome = map['nome'] as String ?? '';
-    sigla = map['sigla'] as String ?? '';
-  }
+  Estado({String id}) : super(id, 'Estado');
 
   @override
-  Estado fromJson(Map<String, dynamic> map) => Estado.fromJson(map);
+  Estado fromJson(Map<String, dynamic> map) => Estado(id: map['id'] as String)
+    ..paisID = map['paisID'] as String
+    ..nome = map['nome'] as String ?? ''
+    ..sigla = map['sigla'] as String ?? '';
 
-  String get paisID => json['paisID'] as String;
-  set paisID(String value) => json['paisID'] = value;
+  String _paisID;
+  String get paisID => _paisID;
+  set paisID(String _) => set('paisID', _paisID = _);
 
-  String get nome => json['nome'] as String;
-  set nome(String value) => json['nome'] = value;
+  String _nome;
+  String get nome => _nome;
+  set nome(String _) => set('nome', _nome = _);
 
-  String get sigla => json['sigla'] as String;
-  set sigla(String value) => json['sigla'] = value;
+  String _sigla;
+  String get sigla => _sigla;
+  set sigla(String _) => set('sigla', _sigla = _);
 
   Pais _pais;
   Pais get pais => _pais;
-  set pais(Pais value) => value != null ? paisID = (_pais = value).id : '';
-
-  @override
-  Map<String, dynamic> get deepmap => Map<String, dynamic>.from(json)
-    ..['pais'] = pais?.deepmap ?? <String, dynamic>{};
+  set pais(Pais _) => paisID = setdeep('pais', _pais = _);
 
   @override
   Future<Estado> deep(entities, {foreign, update}) async {
-    super.deep(entities, foreign: foreign, update: update);
-
+    deepconfig(entities, foreign: foreign, update: update);
     fill<Pais>(pais, paisID, (_) => pais = _);
-    await deepprocess();
 
-    return this;
+    return await deepprocess();
   }
 }

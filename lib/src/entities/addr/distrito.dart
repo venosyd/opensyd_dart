@@ -3,52 +3,44 @@
 ///
 /// sergio lisan <sels@venosyd.com>
 ///
-library opensyd.entities.addr.v2.distrito;
+library opensyd.entities.addr.distrito;
 
 import 'dart:async';
 
-import '../util/_module_.dart';
+import '../_module_.dart';
 import 'cidade.dart';
 
 ///
 /// os nomes das classes estao em portugues propositalmente
 /// para nao conflitar com a lib antiga
 ///
-class Distrito extends SerializableEntity {
+class Distrito extends OpensydEntity {
   ///
-  Distrito() : super(null, 'Distrito');
-
-  Distrito.fromJson(Map<String, dynamic> map)
-      : super(map['id'] as String, 'Distrito') {
-    cidadeID = map['cidadeID'] as String;
-    nome = map['nome'] as String ?? '';
-  }
+  Distrito({String id}) : super(id, 'Distrito');
 
   @override
-  Distrito fromJson(Map<String, dynamic> map) => Distrito.fromJson(map);
+  Distrito fromJson(Map<String, dynamic> map) =>
+      Distrito(id: map['id'] as String)
+        ..cidadeID = map['cidadeID'] as String
+        ..nome = map['nome'] as String ?? '';
 
-  String get cidadeID => json['cidadeID'] as String;
-  set cidadeID(String value) => json['cidadeID'] = value;
+  String _cidadeID;
+  String get cidadeID => _cidadeID;
+  set cidadeID(String _) => set('cidadeID', _cidadeID = _);
 
-  String get nome => json['nome'] as String;
-  set nome(String value) => json['nome'] = value;
+  String _nome;
+  String get nome => _nome;
+  set nome(String _) => set('nome', _nome = _);
 
   Cidade _cidade;
   Cidade get cidade => _cidade;
-  set cidade(Cidade value) =>
-      value != null ? cidadeID = (_cidade = value).id : '';
-
-  @override
-  Map<String, dynamic> get deepmap => Map<String, dynamic>.from(json)
-    ..['cidade'] = cidade?.deepmap ?? <String, dynamic>{};
+  set cidade(Cidade _) => cidadeID = setdeep('cidade', _cidade = _);
 
   @override
   Future<Distrito> deep(entities, {foreign, update}) async {
-    super.deep(entities, foreign: foreign, update: update);
-
+    deepconfig(entities, foreign: foreign, update: update);
     fill<Cidade>(cidade, cidadeID, (_) => cidade = _);
-    await deepprocess();
 
-    return this;
+    return await deepprocess();
   }
 }

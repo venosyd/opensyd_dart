@@ -3,11 +3,11 @@
 ///
 /// sergio lisan <sels@venosyd.com>
 ///
-library opensyd.entities.addr.v2.endereco;
+library opensyd.entities.addr.endereco;
 
 import 'dart:async';
 
-import '../util/_module_.dart';
+import '../_module_.dart';
 import 'cidade.dart';
 import 'distrito.dart';
 import 'estado.dart';
@@ -18,21 +18,43 @@ import 'pais.dart';
 /// os nomes das classes estao em portugues propositalmente
 /// para nao conflitar com a lib antiga
 ///
-class Endereco extends SerializableEntity {
+class Endereco extends OpensydEntity {
   ///
-  Endereco() : super(null, 'Endereco');
-
-  Endereco.fromJson(Map<String, dynamic> map)
-      : super(map['id'] as String, 'Endereco') {
-    logradouroID = map['logradouroID'] as String;
-    numero = Parsers.parseInt(map['numero']);
-    complemento = map['complemento'] as String ?? '';
-    longitude = Parsers.parseDouble(map['longitude']);
-    latitude = Parsers.parseDouble(map['latitude']);
-  }
+  Endereco({String id}) : super(id, 'Endereco');
 
   @override
-  Endereco fromJson(Map<String, dynamic> map) => Endereco.fromJson(map);
+  Endereco fromJson(Map<String, dynamic> map) =>
+      Endereco(id: map['id'] as String)
+        ..logradouroID = map['logradouroID'] as String
+        ..numero = Parsers.parseInt(map['numero'])
+        ..complemento = map['complemento'] as String ?? ''
+        ..longitude = Parsers.parseDouble(map['longitude'])
+        ..latitude = Parsers.parseDouble(map['latitude']);
+
+  String _logradouroID;
+  String get logradouroID => _logradouroID;
+  set logradouroID(String _) => set('logradouroID', _logradouroID = _);
+
+  String _complemento;
+  String get complemento => _complemento;
+  set complemento(String _) => set('complemento', _complemento = _);
+
+  int _numero;
+  int get numero => _numero;
+  set numero(int _) => set('numero', _numero = _);
+
+  double _latitude;
+  double get latitude => _latitude;
+  set latitude(double _) => set('latitude', _latitude = _);
+
+  double _longitude;
+  double get longitude => _longitude;
+  set longitude(double _) => set('longitude', _longitude = _);
+
+  Logradouro _logradouro;
+  Logradouro get logradouro => _logradouro;
+  set logradouro(Logradouro _) =>
+      logradouroID = setdeep('logradouro', _logradouro = _);
 
   ///
   String get extenso => logradouro == null
@@ -59,42 +81,17 @@ class Endereco extends SerializableEntity {
   ///
   Pais get pais => logradouro.distrito.cidade.estado.pais;
 
-  String get logradouroID => json['logradouroID'] as String;
-  set logradouroID(String value) => json['logradouroID'] = value;
-
-  String get complemento => json['complemento'] as String;
-  set complemento(String value) => json['complemento'] = value;
-
-  int get numero => json['numero'] as int;
-  set numero(int value) => json['numero'] = value;
-
-  double get latitude => json['latitude'] as double;
-  set latitude(double value) => json['latitude'] = value;
-
-  double get longitude => json['longitude'] as double;
-  set longitude(double value) => json['longitude'] = value;
-
-  Logradouro _logradouro;
-  Logradouro get logradouro => _logradouro;
-  set logradouro(Logradouro value) =>
-      value != null ? logradouroID = (_logradouro = value).id : '';
-
-  @override
-  Map<String, dynamic> get deepmap => Map<String, dynamic>.from(json)
-    ..['logradouro'] = logradouro?.deepmap ?? <String, dynamic>{};
-
   @override
   Future<Endereco> deep(entities, {foreign, update}) async {
-    super.deep(entities, foreign: foreign, update: update);
+    deepconfig(entities, foreign: foreign, update: update);
 
     fill<Logradouro>(
       logradouro,
       logradouroID,
       (_) => logradouro = _,
-      foreigndb: 'address',
+      foreigndb: 'spanish',
     );
 
-    await deepprocess();
-    return this;
+    return await deepprocess();
   }
 }

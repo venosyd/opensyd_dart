@@ -7,64 +7,54 @@ library opensyd.entities.logs.log;
 
 import 'dart:async';
 
-import '../../commons/_module_.dart';
-import '../../extensions/_module_.dart';
-import '../util/_module_.dart';
+import '../_module_.dart';
 
-class Log extends SerializableEntity {
+///
+class Log extends OpensydEntity {
   ///
-  Log() : super(null, 'Log');
-
-  Log.fromJson(Map<String, dynamic> map) : super(map['id'] as String, 'Log') {
-    type = Parsers.parseInt(map['type']);
-    timestamp = Parsers.parseInt(map['timestamp']);
-    namespace = map['namespace'] as String;
-    module = map['module'] as String;
-    user = map['user'] as String;
-    title = map['title'] as String;
-    details = map['details'] as String;
-  }
+  Log({String id}) : super(id, 'Log');
 
   @override
-  Log fromJson(Map<String, dynamic> map) => Log.fromJson(map);
+  Log fromJson(Map<String, dynamic> map) => Log(id: map['id'] as String)
+    ..type = Parsers.parseInt(map['type'])
+    ..timestamp = Parsers.parseInt(map['timestamp'])
+    ..namespace = map['namespace'] as String
+    ..module = map['module'] as String
+    ..user = map['user'] as String
+    ..title = map['title'] as String
+    ..details = map['details'] as String;
 
-  String get typeF => type == 1 ? 'info' : (type == 2 ? 'warning' : 'error');
+  int _type;
+  int get type => _type;
+  set type(int _) => set('type', _type = _);
 
-  String get timestampF => Dates.fromInt(timestamp);
+  int _timestamp;
+  int get timestamp => _timestamp;
+  set timestamp(int _) => set('timestamp', _timestamp = _);
 
-  String get timestampDT => Dates.fromIntToReadable(timestamp);
+  String _namespace;
+  String get namespace => _namespace;
+  set namespace(String _) => set('namespace', _namespace = _);
 
-  String get timestampHTML => Dates.toHTMLFormatted(timestamp);
+  String _module;
+  String get module => _module;
+  set module(String _) => set('module', _module = _);
+
+  String _user;
+  String get user => _user;
+  set user(String _) => set('user', _user = _);
+
+  String _title;
+  String get title => _title;
+  set title(String _) => set('title', _title = _);
+
+  String _details;
+  String get details => _details;
+  set details(String _) => set('details', _details = _);
 
   /// (1- Info, 2- Warning, 3- Error)
-  int get type => json['type'] as int;
-  set type(int value) => json['type'] = value;
-
-  int get timestamp => json['timestamp'] as int;
-  set timestamp(int value) => json['timestamp'] = value;
-
-  String get namespace => json['namespace'] as String;
-  set namespace(String value) => json['namespace'] = value;
-
-  String get module => json['module'] as String;
-  set module(String value) => json['module'] = value;
-
-  String get user => json['user'] as String;
-  set user(String value) => json['user'] = value;
-
-  String get title => json['title'] as String;
-  set title(String value) => json['title'] = value;
-
-  String get details => json['details'] as String;
-  set details(String value) => json['details'] = value;
+  String get typeF => {1: 'info', 2: 'warning', 3: 'error'}[type];
 
   @override
-  Map<String, dynamic> get deepmap => Map<String, dynamic>.from(json)
-    ..['date'] = timestamp.datetime.readabledatetime;
-
-  @override
-  Future<Log> deep(entities, {foreign, update}) async {
-    super.deep(entities, foreign: foreign, update: update);
-    return this;
-  }
+  Future<Log> deep(entities, {foreign, update}) async => this;
 }

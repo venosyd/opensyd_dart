@@ -7,7 +7,7 @@ library opensyd.entities.util.fillers;
 
 import 'dart:async';
 
-import 'entities.dart';
+import 'opensydentity.dart';
 
 ///
 /// sao preenchedores do VEF (Venosyd Entities Framework)
@@ -17,29 +17,29 @@ abstract class Fillers {
   /// preenche um objeto raso associando objetos compostos encontrados
   /// na base de dados
   ///
-  static Future<T> fillFromAnID<T extends SerializableEntity>({
+  static Future<T> fillFromAnID<T extends OpensydEntity>({
     Map<String, Entities> foreign,
     Entities entities,
     String id,
     bool update = false,
   }) async {
-    final shallow = await entities.byID<T>(id);
+    final object = await entities.byID<T>(id);
 
-    if (shallow.entities == null || update)
-      return await shallow.deep(
+    if (object.isshallow || update)
+      return await object.deep(
         entities,
         foreign: foreign,
         update: update,
       ) as T;
     //
     else
-      return shallow;
+      return object;
   }
 
   ///
   /// substituta da fillList
   ///
-  static Future<List<T>> fillFromIDs<T extends SerializableEntity>({
+  static Future<List<T>> fillFromIDs<T extends OpensydEntity>({
     Map<String, Entities> foreign,
     Entities entities,
     List<String> ids,
@@ -60,7 +60,7 @@ abstract class Fillers {
   ///
   /// substituta da fillAll
   ///
-  static Future<List<T>> fillShallowObjects<T extends SerializableEntity>({
+  static Future<List<T>> fillShallowObjects<T extends OpensydEntity>({
     Map<String, Entities> foreign,
     Entities entities,
     List<T> shallowObjs,
@@ -69,7 +69,7 @@ abstract class Fillers {
     final futures = <Future<T>>[];
 
     for (final shallow in shallowObjs) {
-      if (shallow.entities == null || update)
+      if (shallow.isshallow || update)
         futures.add(shallow.deep(entities, foreign: foreign, update: update)
             as Future<T>);
       //

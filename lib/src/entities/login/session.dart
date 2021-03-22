@@ -7,42 +7,40 @@ library opensyd.entities.login.session;
 
 import 'dart:async';
 
-import '../util/_module_.dart';
+import '../_module_.dart';
 import 'authuser.dart';
 
-class Session extends SerializableEntity {
+///
+class Session extends OpensydEntity {
   ///
-  Session() : super(null, 'Session');
-
-  Session.fromJson(Map<String, dynamic> map)
-      : super(map['id'] as String, 'Session') {
-    authuserID = map['authuserID'] as String;
-    sessions = (map['sessions'] as List)?.cast<String>();
-  }
+  Session({String id}) : super(id, 'Session');
 
   @override
-  Session fromJson(Map<String, dynamic> map) => Session.fromJson(map);
+  Session fromJson(Map<String, dynamic> map) => Session(id: map['id'] as String)
+    ..authuserID = map['authuserID'] as String
+    ..sessions = Parsers.parseList(map['sessions']);
 
-  bool validsession(String token) => sessions?.contains(token) ?? false;
+  String _authuserID;
+  String get authuserID => _authuserID;
+  set authuserID(String _) => set('authuserID', _authuserID = _);
 
-  String get authuserID => json['authuserID'] as String;
-  set authuserID(String value) => json['authuserID'] = value;
-
-  List<String> get sessions => json['sessions'] as List<String>;
-  set sessions(List<String> value) => json['sessions'] = value;
+  List<String> _sessions = [];
+  List<String> get sessions => _sessions;
+  set sessions(List<String> _) => set('sessions', _sessions = _);
 
   AuthUser _authuser;
   AuthUser get authuser => _authuser;
-  set authuser(AuthUser value) =>
-      value != null ? authuserID = (_authuser = value).id : '';
+  set authuser(AuthUser _) => authuserID = setdeep('authuser', _authuser = _);
+
+  ///
+  bool validsession(String token) => sessions?.contains(token) ?? false;
 
   @override
   Future<Session> deep(entities, {foreign, update}) async {
-    super.deep(entities, foreign: foreign, update: update);
+    deepconfig(entities, foreign: foreign, update: update);
 
     fill<AuthUser>(_authuser, authuserID, (_) => authuser = _);
-    await deepprocess();
 
-    return this;
+    return await deepprocess();
   }
 }

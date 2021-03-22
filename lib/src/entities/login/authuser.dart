@@ -7,59 +7,54 @@ library opensyd.entities.login.authuser;
 
 import 'dart:async';
 
-import '../../commons/_module_.dart';
-import '../util/_module_.dart';
+import '../_module_.dart';
 
 ///
 ///
 ///
-class AuthUser extends SerializableEntity {
+class AuthUser extends OpensydEntity {
   ///
-  AuthUser() : super(null, 'AuthUser');
-
-  AuthUser.fromJson(Map<String, dynamic> map)
-      : super(map['id'] as String, 'AuthUser') {
-    email = map['email'] as String;
-    phone = map['phone'] as String;
-    password = map['password'] as String;
-    authorized = Parsers.parseInt(map['authorized']);
-    roles = (map['roles'] as List)?.cast<String>();
-    history = (map['history'] as List)?.cast<String>();
-    registerdate = Parsers.parseInt(map['registerdate']) ??
-        DateTime.parse(map['register_date'] as String).millisecondsSinceEpoch;
-  }
+  AuthUser({String id}) : super(id, 'AuthUser');
 
   @override
-  AuthUser fromJson(Map<String, dynamic> map) => AuthUser.fromJson(map);
+  AuthUser fromJson(Map<String, dynamic> map) =>
+      AuthUser(id: map['id'] as String)
+        ..email = map['email'] as String
+        ..phone = map['phone'] as String
+        ..password = map['password'] as String
+        ..authorized = Parsers.parseInt(map['authorized'])
+        ..registerdate = Parsers.parseInt(map['registerdate'])
+        ..roles = Parsers.parseList(map['roles'])
+        ..history = Parsers.parseList(map['history']);
 
-  String get registerdatedt => Dates.fromIntToReadable(registerdate);
+  String _email;
+  String get email => _email;
+  set email(String _) => set('email', _email = _);
 
-  String get registerdateF => Dates.toHTMLFormatted(registerdate);
+  String _phone;
+  String get phone => _phone;
+  set phone(String _) => set('phone', _phone = _);
 
-  String get email => json['email'] as String;
-  set email(String value) => json['email'] = value;
+  String _password;
+  String get password => _password;
+  set password(String _) => set('password', _password = _);
 
-  String get phone => json['phone'] as String;
-  set phone(String value) => json['phone'] = value;
+  int _registerdate;
+  int get registerdate => _registerdate;
+  set registerdate(int _) => set('registerdate', _registerdate = _);
 
-  String get password => json['password'] as String;
-  set password(String value) => json['password'] = value;
+  int _authorized;
+  int get authorized => _authorized;
+  set authorized(int _) => set('authorized', _authorized = _);
 
-  int get registerdate => json['registerdate'] as int;
-  set registerdate(int value) => json['registerdate'] = value;
+  List<String> _history = [];
+  List<String> get history => _history;
+  set history(List<String> _) => set('history', _history = _);
 
-  int get authorized => json['authorized'] as int;
-  set authorized(int value) => json['authorized'] = value;
-
-  List<String> get history => json['history'] as List<String>;
-  set history(List<String> value) => json['history'] = value;
-
-  List<String> get roles => json['roles'] as List<String>;
-  set roles(List<String> value) => json['roles'] = value;
+  List<String> _roles = [];
+  List<String> get roles => _roles;
+  set roles(List<String> _) => set('roles', _roles = _);
 
   @override
-  Future<AuthUser> deep(entities, {foreign, update}) async {
-    super.deep(entities, foreign: foreign, update: update);
-    return this;
-  }
+  Future<AuthUser> deep(entities, {foreign, update}) async => this;
 }

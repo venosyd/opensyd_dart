@@ -32,7 +32,13 @@ abstract class Parsers {
   static List<T> parseList<T>(dynamic list) =>
       (list as List)?.toList()?.cast<T>() ?? [];
 
-  /// faz a conversao de uma string para uma lista de objetos
+  /// faz a conversao de uma string para um mapa de objetos
   static Map<K, T> parseMap<K, T>(dynamic map) =>
       (map?.cast<K, T>() ?? <K, T>{}) as Map<K, T>;
+
+  /// faz a conversao de uma string para um mapa de doubles
+  static Map<K, double> parseDoubleMap<K>(dynamic map) => {
+        for (final id in (map ?? <K, double>{}).keys)
+          id as K: Parsers.parseDouble(map[id]),
+      };
 }

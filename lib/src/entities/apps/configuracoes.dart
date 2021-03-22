@@ -3,35 +3,27 @@
 ///
 /// sergio lisan <sels@venosyd.com>
 ///
-library opensyd.entities.apps;
+library opensyd.entities.apps.config;
 
 import 'dart:async';
 
-import '../util/_module_.dart';
+import 'package:opensyd_dart/opensyd_dart.dart';
 
 ///
-class Configuracoes extends SerializableEntity {
+class Configuracoes extends OpensydEntity {
   ///
   Configuracoes({String id}) : super(id, 'Configuracoes');
 
-  Configuracoes.fromJson(Map<String, dynamic> map)
-      : super(map['id'] as String, 'Configuracoes') {
-    json.addAll(map);
-  }
-
   @override
   Configuracoes fromJson(Map<String, dynamic> map) =>
-      Configuracoes.fromJson(map);
+      Configuracoes(id: map['id'] as String)..json.addAll(map);
 
   ///
-  dynamic operator [](String key) => json[key];
+  dynamic operator [](String key) => get<dynamic>(key);
 
   ///
-  void operator []=(String key, dynamic value) => json[key] = value;
+  void operator []=(String key, dynamic value) => set<dynamic>(key, value);
 
   @override
-  Future<Configuracoes> deep(entities, {foreign, update}) async {
-    super.deep(entities, foreign: foreign, update: update);
-    return this;
-  }
+  Future<Configuracoes> deep(entities, {foreign, update}) async => this;
 }
