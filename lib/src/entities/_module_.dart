@@ -27,9 +27,9 @@ export 'support/_module_.dart';
 ///
 ///
 ///
-class VenosydModel extends EntitiesIntegrationModel {
+class OpensydModel extends EntitiesIntegrationModel {
   ///
-  VenosydModel._()
+  OpensydModel._()
       : super(
           exclusiveClasses: <OpensydEntity>[
             // for apps
@@ -47,8 +47,8 @@ class VenosydModel extends EntitiesIntegrationModel {
         );
 
   ///
-  static VenosydModel _instance;
+  static OpensydModel _instance;
 
   ///
-  static VenosydModel get instance => _instance ??= VenosydModel._();
+  static OpensydModel get instance => _instance ??= OpensydModel._();
 }
