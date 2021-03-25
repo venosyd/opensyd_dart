@@ -25,7 +25,7 @@ abstract class Fillers {
   }) async {
     final object = await entities.byID<T>(id);
 
-    if (object.isshallow || update)
+    if (object != null && (object.isshallow || update))
       return await object.deep(
         entities,
         foreign: foreign,
@@ -68,13 +68,13 @@ abstract class Fillers {
   }) async {
     final futures = <Future<T>>[];
 
-    for (final shallow in shallowObjs) {
-      if (shallow.isshallow || update)
-        futures.add(shallow.deep(entities, foreign: foreign, update: update)
+    for (final object in shallowObjs) {
+      if (object != null && (object.isshallow || update))
+        futures.add(object.deep(entities, foreign: foreign, update: update)
             as Future<T>);
       //
       else
-        futures.add((() async => shallow)());
+        futures.add((() async => object)());
     }
 
     return List<T>.from(await Future.wait<T>(futures));
