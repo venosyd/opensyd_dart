@@ -89,7 +89,7 @@ class Endereco extends OpensydEntity {
       logradouro,
       logradouroID,
       (_) => logradouro = _,
-      foreigndb: 'spanish',
+      foreigndb: 'address',
     );
 
     return await deepprocess();

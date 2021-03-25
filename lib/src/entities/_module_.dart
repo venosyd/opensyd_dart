@@ -36,11 +36,11 @@ class OpensydModel extends EntitiesIntegrationModel {
             ...[Account(), Configuracoes()],
             // aulikara
             ...[News(), Topic(), Report()],
-            // songhai
+            // login
             ...[AuthUser(), Session()],
             // hotaki
             ...[Log(), Namespace()],
-            // spanish
+            // address
             ...[Endereco(), EnderecoLocal(), Logradouro(), TipoLogradouro()],
             ...[Distrito(), Cidade(), Estado(), Pais()],
           ],
